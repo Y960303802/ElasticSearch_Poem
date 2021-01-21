@@ -1,0 +1,46 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xizi.poem.dao.PoemDAO">
+
+
+    <resultMap id="poemMap" type="com.xizi.poem.entity.Poem">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="author" property="author"/>
+        <result column="type" property="type"/>
+        <result column="origin" property="origin"/>
+        <result column="content" property="content"/>
+        <result column="href" property="href"/>
+        <result column="authordes" property="authordes"/>
+        <!--维护类别-->
+        <association property="category" javaType="com.xizi.poem.entity.Category">
+            <id column="cid" property="id"/>
+            <result column="cname" property="name"/>
+        </association>
+    </resultMap>
+
+    <select id="findTotalCounts" resultType="Long">
+        select count(p.id)
+        from t_poem p
+        left join t_category c
+        on p.categoryid = c.id
+    </select>
+
+
+    <select id="findByPage" resultMap="poemMap">
+        select p.id,p.name,p.author,p.type,p.origin,p.content,p.href,p.authordes,
+        c.id cid,c.name cname
+        from t_poem p
+        left join t_category c
+        on p.categoryid = c.id
+        limit #{start},#{size}
+    </select>
+
+    <select id="findAll" resultMap="poemMap">
+        select p.id,p.name,p.author,p.type,p.origin,p.content,p.href,p.authordes,
+        c.id cid,c.name cname
+        from t_poem p
+        left join t_category c
+        on p.categoryid = c.id
+    </select>
+
+</mapper>
